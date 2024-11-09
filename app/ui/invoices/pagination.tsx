@@ -5,30 +5,33 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '@/app/lib/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
+
 export default function Pagination({ totalPages }: { totalPages: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
+
+  // Generate the URLs for pagination pages
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
-  // NOTE: Uncomment this code in Chapter 11
 
-  // const allPages = generatePagination(currentPage, totalPages);
+  // Get all pages for the pagination component
+  const allPages = generatePagination(currentPage, totalPages);
 
   return (
     <>
-      {/*  NOTE: Uncomment this code in Chapter 11 */}
-
-      {/* <div className="inline-flex">
+      <div className="inline-flex">
+        {/* Left arrow button */}
         <PaginationArrow
           direction="left"
           href={createPageURL(currentPage - 1)}
           isDisabled={currentPage <= 1}
         />
 
+        {/* Pagination numbers */}
         <div className="flex -space-x-px">
           {allPages.map((page, index) => {
             let position: 'first' | 'last' | 'single' | 'middle' | undefined;
@@ -50,12 +53,13 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
           })}
         </div>
 
+        {/* Right arrow button */}
         <PaginationArrow
           direction="right"
           href={createPageURL(currentPage + 1)}
           isDisabled={currentPage >= totalPages}
         />
-      </div> */}
+      </div>
     </>
   );
 }
